@@ -1,0 +1,175 @@
+import json
+
+spec = {
+  "openapi": "3.0.3",
+  "info": {
+    "title": "B2B Company Deep-Enrichment API",
+    "description": "Deep B2B Company Intelligence & Sales Outreach Enrichment Engine for AI Agents (Make, n8n, Clay, LangChain). Extracts Technographics (100+ tools), Firmographics, AI Cold Outreach Icebreakers, and Contact Graphs.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "TopAI SaaS Dev",
+      "email": "top.ai.saas@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://b2b-company-enrichment.topaisaas.workers.dev",
+      "description": "Cloudflare Workers Serverless Production Edge"
+    }
+  ],
+  "paths": {
+    "/v1/enrich": {
+      "post": {
+        "summary": "Deep Enrich Company Profile",
+        "description": "Performs full intelligence extraction including Technographics, Firmographics, Sales Hooks, and Contact Graph.",
+        "requestBody": {
+          "required": True,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "domain": { "type": "string", "example": "stripe.com" },
+                  "url": { "type": "string", "example": "https://stripe.com" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Enrichment data successfully generated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": True },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "domain": { "type": "string", "example": "stripe.com" },
+                        "company_name": { "type": "string", "example": "Stripe" },
+                        "tagline": { "type": "string", "example": "Financial Infrastructure for the Internet" },
+                        "firmographics": { "type": "object" },
+                        "technographics": { "type": "object" },
+                        "sales_intelligence": { "type": "object" },
+                        "contact_graph": { "type": "object" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid domain or security error" }
+        }
+      },
+      "get": {
+        "summary": "Deep Enrich Company Profile (Query String)",
+        "description": "Convenient GET endpoint for quick lookups and browser testing.",
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "query",
+            "required": True,
+            "schema": { "type": "string", "example": "stripe.com" },
+            "description": "Target domain name"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Company profile retrieved" },
+          "400": { "description": "Missing domain parameter" }
+        }
+      }
+    },
+    "/v1/enrich/techstack": {
+      "post": {
+        "summary": "Detect Technographics & Software Stack",
+        "description": "Scans for 100+ modern tools across Analytics, Frameworks, CMS, Payments, CRM, and Cloud.",
+        "requestBody": {
+          "required": True,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["domain"],
+                "properties": {
+                  "domain": { "type": "string", "example": "linear.app" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Tech stack detected" }
+        }
+      }
+    },
+    "/v1/enrich/pitch": {
+      "post": {
+        "summary": "Generate AI Sales Hooks & Value Props",
+        "description": "Generates 3 ready-to-use hyper-personalized cold outreach hooks based on the company's stack and positioning.",
+        "requestBody": {
+          "required": True,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["domain"],
+                "properties": {
+                  "domain": { "type": "string", "example": "supabase.com" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Sales intelligence generated" }
+        }
+      }
+    },
+    "/v1/enrich/batch": {
+      "post": {
+        "summary": "Batch Enrich Multiple Companies (Up to 10)",
+        "description": "Enriches multiple company domains concurrently in a single API call.",
+        "requestBody": {
+          "required": True,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["domains"],
+                "properties": {
+                  "domains": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "example": ["stripe.com", "linear.app", "vercel.com"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Batch results returned" }
+        }
+      }
+    },
+    "/v1/health": {
+      "get": {
+        "summary": "API Healthcheck",
+        "description": "Returns the operational health and version status of the microservice.",
+        "responses": {
+          "200": { "description": "Service is operational" }
+        }
+      }
+    }
+  }
+}
+
+target_path = r"c:\Users\Admin\Desktop\projet 1 full IA\03-b2b-company-enrichment\openapi.json"
+with open(target_path, "w", encoding="utf-8") as f:
+    json.dump(spec, f, indent=2, ensure_ascii=False)
+
+print(f"Generated {target_path} successfully without BOM.")
