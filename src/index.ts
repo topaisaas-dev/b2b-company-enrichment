@@ -353,6 +353,8 @@ app.get("/", (c) => {
     });
   }
 
+  c.header("Cache-Control", "no-cache, no-store, must-revalidate");
+
   return c.html(`<!DOCTYPE html>
 <html lang="en">
 <head>
